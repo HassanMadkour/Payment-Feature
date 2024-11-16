@@ -16,7 +16,7 @@ class PriceSection extends StatelessWidget {
   static List<PriceEntity> prices = [
     PriceEntity(price: 50.97, title: "Order Subtotal"),
     PriceEntity(price: 0, title: "Discount"),
-    PriceEntity(price: 8, title: "Shipping"),
+    PriceEntity(price: 0, title: "Shipping"),
   ];
   @override
   Widget build(BuildContext context) {

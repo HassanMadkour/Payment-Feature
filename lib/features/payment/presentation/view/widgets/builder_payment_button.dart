@@ -56,15 +56,15 @@ class BuilderPaymentButton extends StatelessWidget {
   ItemList getListOfItems() {
     return ItemList(items: [
       Item(currency: "USD", name: "x", price: "20", quantity: 1),
-      Item(currency: "USD", name: "x", price: "30", quantity: 1),
+      Item(currency: "USD", name: "x", price: "30.97", quantity: 1),
     ]);
   }
 
   Amount getAmount() {
     return Amount(
         currency: "USD",
-        details: Details(shipping: '0', shippingDiscount: 0, subtotal: '50'),
-        total: '50');
+        details: Details(shipping: '0', shippingDiscount: 0, subtotal: '50.97'),
+        total: '50.97');
   }
 
   void stripePaymentDo(BuildContext context) {
