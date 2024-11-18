@@ -81,6 +81,8 @@ class PaymentIntent extends PaymentIntentEntity {
     this.transferData,
     this.transferGroup,
   }) : super(
+            paymentTime: DateTime.fromMillisecondsSinceEpoch(created! * 1000),
+            chargeID: latestCharge,
             paymentAmount: amount!,
             paymentID: id!,
             paymentClientSecret: clientSecret!,

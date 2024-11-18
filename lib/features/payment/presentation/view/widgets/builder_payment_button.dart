@@ -24,7 +24,8 @@ class BuilderPaymentButton extends StatelessWidget {
       listener: (context, state) {
         if (state is StripePaymentSuccess) {
           Navigator.pop(context);
-          GoRouter.of(context).push(AppRouter.transactionDone);
+          GoRouter.of(context).push(AppRouter.transactionDone,
+              extra: state.transactionDoneEntity);
         }
         if (state is StripePaymentFailure) {
           Navigator.pop(context);
@@ -70,6 +71,8 @@ class BuilderPaymentButton extends StatelessWidget {
   void stripePaymentDo(BuildContext context) {
     BlocProvider.of<StripePaymentCubit>(context).execute(
         InputPaymentIntentEntity(
-            amount: 2000, currency: 'usd', customerId: "cus_RDdNwt33eDaZFs"));
+            amount: 50.97 * 100,
+            currency: 'usd',
+            customerId: "cus_RDdNwt33eDaZFs"));
   }
 }

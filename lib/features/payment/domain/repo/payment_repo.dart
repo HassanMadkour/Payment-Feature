@@ -3,9 +3,10 @@ import 'package:payment_app/core/utils/errors/failure.dart';
 import 'package:payment_app/features/payment/domain/entities/input_payment_intent_entity.dart';
 import 'package:payment_app/features/payment/domain/entities/strip_customer_entity.dart';
 import 'package:payment_app/features/payment/domain/entities/strip_cutomer_input_entity.dart';
+import 'package:payment_app/features/payment/domain/entities/transaction_done_entity.dart';
 
 abstract class PaymentRepo {
-  Future<Either<Failure, void>> makeStripePayment(
+  Future<Either<Failure, TransactionDoneEntity>> makeStripePayment(
       InputPaymentIntentEntity inputPaymentIntentEntity);
   Future<Either<Failure, StripeCustomerEntity>> createStripeCustomer(
       StripeCustomerInputEntity stripeCustomerInputEntity);

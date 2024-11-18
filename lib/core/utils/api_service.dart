@@ -15,4 +15,15 @@ class ApiService {
 
     return response.data;
   }
+
+  Future<Map<String, dynamic>> get(String endPoint, String token,
+      {Map<String, dynamic>? headers}) async {
+    Response response = await dio.get("$baseUrl$endPoint",
+        options: Options(
+          headers: headers ?? {"Authorization": "Bearer $token"},
+          contentType: Headers.formUrlEncodedContentType,
+        ));
+
+    return response.data;
+  }
 }

@@ -9,6 +9,7 @@ import 'package:payment_app/features/payment/domain/entities/input_payment_inten
 import 'package:payment_app/features/payment/domain/entities/payment_intent_entity.dart';
 import 'package:payment_app/features/payment/domain/entities/strip_customer_entity.dart';
 import 'package:payment_app/features/payment/domain/entities/strip_cutomer_input_entity.dart';
+import 'package:payment_app/features/payment/domain/entities/transaction_done_entity.dart';
 import 'package:payment_app/features/payment/domain/repo/payment_repo.dart';
 
 class PaymentRepoImpl extends PaymentRepo {
@@ -16,11 +17,12 @@ class PaymentRepoImpl extends PaymentRepo {
 
   PaymentRepoImpl(this.remoteDataSource);
   @override
-  Future<Either<Failure, void>> makeStripePayment(
+  Future<Either<Failure, TransactionDoneEntity>> makeStripePayment(
       InputPaymentIntentEntity inputPaymentIntentEntity) async {
     try {
-      await stripePayment(inputPaymentIntentEntity);
-      return right(null);
+      TransactionDoneEntity transactionDoneEntity =
+          await stripePayment(inputPaymentIntentEntity);
+      return right(transactionDoneEntity);
     } on DioException catch (e) {
       return left(ServerFailure.dioException(e));
     } on StripeException catch (e) {
@@ -30,17 +32,15 @@ class PaymentRepoImpl extends PaymentRepo {
     }
   }
 
-  Future<void> stripePayment(
+  Future<TransactionDoneEntity> stripePayment(
       InputPaymentIntentEntity inputPaymentIntentEntity) async {
     PaymentIntentEntity paymentIntentEntity =
         await remoteDataSource.createPaymentIntent(inputPaymentIntentEntity);
-    print(inputPaymentIntentEntity.customerId);
-    print("------------------------");
+
     String? ephemeralKey = inputPaymentIntentEntity.customerId != null
         ? await remoteDataSource
             .getEphemeralKey(inputPaymentIntentEntity.customerId!)
         : null;
-    print(ephemeralKey);
     await Stripe.instance.initPaymentSheet(
         paymentSheetParameters: SetupPaymentSheetParameters(
       merchantDisplayName: 'Me',
@@ -50,6 +50,9 @@ class PaymentRepoImpl extends PaymentRepo {
     ));
 
     await Stripe.instance.presentPaymentSheet();
+    TransactionDoneEntity transactionDoneEntity =
+        await remoteDataSource.getPaymentIntent(paymentIntentEntity);
+    return transactionDoneEntity;
   }
 
   @override

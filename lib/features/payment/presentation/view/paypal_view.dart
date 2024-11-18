@@ -5,6 +5,7 @@ import "package:flutter_paypal_payment/flutter_paypal_payment.dart";
 import "package:go_router/go_router.dart";
 import "package:payment_app/core/utils/api_keys.dart";
 import "package:payment_app/core/utils/app_router.dart";
+import "package:payment_app/features/payment/domain/entities/transaction_done_entity.dart";
 import "package:payment_app/features/payment/domain/entities/transaction_paypal_entity/transaction_paypal_entity.dart";
 
 class PaypalView extends StatelessWidget {
@@ -21,11 +22,14 @@ class PaypalView extends StatelessWidget {
       note: "Contact us for any questions on your order.",
       onSuccess: (Map params) async {
         log("onSuccess: $params");
-        GoRouter.of(context).pushReplacement(AppRouter.transactionDone);
+
+        GoRouter.of(context).go(
+          AppRouter.transactionDone,
+          extra: TransactionDoneEntity.fromJsonPaypal(params),
+        );
       },
       onError: (error) {
         log("onError: $error");
-        Navigator.pop(context);
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text("Something went wrong try again")));
